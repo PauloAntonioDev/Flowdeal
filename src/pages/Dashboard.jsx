@@ -8,7 +8,7 @@ import {
   FormControlLabel, Chip, Drawer, List, ListSubheader, ListItem, ListItemButton, ListItemIcon, 
   ListItemText, Divider, AppBar, Toolbar, Card, CardContent,
   Dialog, DialogTitle, DialogContent, DialogActions, IconButton, Switch, ToggleButton, ToggleButtonGroup,
-  Avatar, Badge
+  Avatar, Badge, Snackbar, Alert
 } from '@mui/material';
 import { 
   Dashboard as DashboardIcon, 
@@ -64,6 +64,9 @@ function Dashboard({ user, onLogout }) {
   const [taskEditingId, setTaskEditingId] = useState(null);
   const [newTask, setNewTask] = useState({ title: '', description: '', status: 'Pendiente', dueDate: '' });
   const [taskFilterStatus, setTaskFilterStatus] = useState('all');
+  const [tasksError, setTasksError] = useState(null);
+  const [taskNotice, setTaskNotice] = useState({ open: false, severity: 'info', message: '' });
+  const handleTaskNoticeClose = () => setTaskNotice(prev => ({ ...prev, open: false }));
 
   const resetInvestorForm = () => {
     setNewInvestor({
@@ -120,16 +123,26 @@ function Dashboard({ user, onLogout }) {
   useEffect(() => {
     if (!user) {
       setTasks([]);
+      setTasksError(null);
       return;
     }
     const colRef = collection(db, 'users', user.uid, 'tasks');
-    const unsub = onSnapshot(colRef, (snapshot) => {
-      const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-      setTasks(docs.map(t => ({
-        ...t,
-        dueAt: t?.dueAt?.toDate ? t.dueAt.toDate() : (t?.dueAt ? new Date(t.dueAt) : null)
-      })));
-    });
+    const unsub = onSnapshot(
+      colRef,
+      (snapshot) => {
+        const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        setTasks(docs.map(t => ({
+          ...t,
+          dueAt: t?.dueAt?.toDate ? t.dueAt.toDate() : (t?.dueAt ? new Date(t.dueAt) : null)
+        })));
+        setTasksError(null);
+      },
+      (error) => {
+        console.error('Error al leer tareas:', error);
+        setTasksError(error);
+        setTaskNotice({ open: true, severity: 'error', message: `No se puede conectar a Firestore (${error.code || 'error'})` });
+      }
+    );
     return () => unsub();
   }, [user]);
 
@@ -237,8 +250,10 @@ function Dashboard({ user, onLogout }) {
       setIsTaskDialogOpen(false);
       setTaskEditingId(null);
       setNewTask({ title: '', description: '', status: 'Pendiente', dueDate: '' });
+      setTaskNotice({ open: true, severity: 'success', message: 'Tarea guardada correctamente.' });
     } catch (err) {
       console.error('Error al guardar tarea:', err);
+      setTaskNotice({ open: true, severity: 'error', message: `No se pudo guardar la tarea (${err.code || 'error'})` });
     }
   };
 
@@ -903,6 +918,12 @@ function Dashboard({ user, onLogout }) {
               </Grid>
             </Grid>
 
+            {tasksError && (
+              <Alert severity="error" sx={{ mb: 2 }}>
+                No se pudo cargar las tareas. Revisa configuración de Firebase.
+              </Alert>
+            )}
+
             <TableContainer component={Paper}>
               <Table size="small" aria-label="Tabla de tareas">
                 <TableHead>
@@ -966,6 +987,11 @@ function Dashboard({ user, onLogout }) {
                 <Button variant="contained" onClick={handleSaveTask}>Guardar</Button>
               </DialogActions>
             </Dialog>
+            <Snackbar open={taskNotice.open} autoHideDuration={4000} onClose={handleTaskNoticeClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+              <Alert onClose={handleTaskNoticeClose} severity={taskNotice.severity} sx={{ width: '100%' }}>
+                {taskNotice.message}
+              </Alert>
+            </Snackbar>
           </>
         )}
 

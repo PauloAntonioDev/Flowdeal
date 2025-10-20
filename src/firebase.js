@@ -29,6 +29,9 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+if (import.meta.env.MODE === 'production') {
+  console.info('Firebase env', { projectId: firebaseConfig.projectId, authDomain: firebaseConfig.authDomain });
+}
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 export const db = getFirestore(app);
