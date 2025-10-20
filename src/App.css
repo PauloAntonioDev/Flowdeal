@@ -183,32 +183,37 @@ body {
 
 /* Estilos para el resumen del dashboard */
 .dashboard-summary {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin-bottom: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
 }
 
 .summary-card {
-  background-color: white;
+  background-color: #111827; /* igual a los cuadros inferiores */
+  border: 1px solid #1f2937; /* contorno sutil para destacar el fondo */
   border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 12px;
+  box-shadow: none;
   min-width: 200px;
   flex: 1;
+  height: 160px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .summary-card h3 {
   margin-top: 0;
   color: #555;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .card-value {
-  font-size: 36px;
+  font-size: 24px;
   font-weight: bold;
   color: #4CAF50;
-  margin: 10px 0;
+  margin: 6px 0;
 }
 
 .dashboard-welcome {
@@ -243,8 +248,8 @@ body {
 }
 
 .investor-count {
-  background-color: #FFC107;
-  color: #000;
+  background-color: #3B82F6;
+  color: #fff;
   padding: 5px 15px;
   border-radius: 20px;
   font-weight: bold;
@@ -309,10 +314,10 @@ body {
 }
 
 .add-investor-button {
-  background-color: #FFC107;
+  background-color: #3B82F6;
 }
 .add-investor-button:hover {
-  background-color: #FFB300;
+  background-color: #1D4ED8;
 }
 
 .investors-table-container {
@@ -337,8 +342,8 @@ body {
 }
 
 .investors-table th {
-  background-color: #FFC107;
-  color: #000;
+  background-color: #3B82F6;
+  color: #fff;
   font-weight: bold;
 }
 
@@ -363,7 +368,7 @@ body {
   margin-top: 0;
   margin-bottom: 20px;
   color: #333;
-  border-bottom: 2px solid #FFC107;
+  border-bottom: 2px solid #3B82F6;
   padding-bottom: 10px;
 }
 
@@ -396,9 +401,9 @@ body {
 }
 
 .form-group input:focus, .form-group select:focus {
-  border-color: #FFC107;
+  border-color: #3B82F6;
   outline: none;
-  box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.2);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
 }
 
 .form-group select {
@@ -406,8 +411,8 @@ body {
 }
 
 .submit-button {
-  background-color: #FFC107;
-  color: #000;
+  background-color: #3B82F6;
+  color: #fff;
   border: none;
   padding: 10px 20px;
   border-radius: 4px;
@@ -418,5 +423,60 @@ body {
 }
 
 .submit-button:hover {
-  background-color: #FFB300;
+  background-color: #1D4ED8;
+}
+
+/* Accesibilidad: enlaces de salto y utilidades para lectores de pantalla */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 8px;
+  background: #0b72e7;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  z-index: 1000;
+}
+.skip-link:focus {
+  left: 16px;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Mejora de contraste en tarjetas del dashboard */
+.summary-card { color: #e5e7eb; }
+.summary-card h3 { color: #f1f5f9; }
+.summary-card p { color: #cbd5e1; font-size: 13px; margin-top: 4px; }
+.status-breakdown .status-label { color: #cbd5e1; }
+.status-breakdown .status-value { color: #f9fafb; }
+.investors-table th { color: #fff; }
+.investors-table td { color: #e5e7eb; }
+
+@media (max-width: 768px) {
+  .dashboard-summary {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .summary-card { padding: 10px; height: 140px; }
+  .summary-card h3 { font-size: 13px; }
+  .card-value { font-size: 22px; }
+}
+@media (max-width: 480px) {
+  .dashboard-summary {
+    grid-template-columns: repeat(2, minmax(160px, 1fr));
+    gap: 6px;
+  }
+  .summary-card { padding: 8px; height: 130px; }
+  .summary-card h3 { font-size: 12px; }
+  .card-value { font-size: 20px; margin: 6px 0; }
+  .status-breakdown { font-size: 11px; }
 }

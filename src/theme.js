@@ -3,37 +3,38 @@ import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
   palette: {
+    mode: 'dark',
     primary: {
-      main: '#FFC107', // Amarillo
-      light: '#FFF350',
-      dark: '#C79100',
-      contrastText: '#000',
+      main: '#3B82F6', // Azul para realce
+      light: '#60A5FA',
+      dark: '#1D4ED8',
+      contrastText: '#fff',
     },
     secondary: {
-      main: '#FFB300', // Ámbar (amarillo profundo)
-      light: '#FFD54F',
-      dark: '#C66900',
-      contrastText: '#000',
+      main: '#7C3AED', // Púrpura para badges
+      light: '#A78BFA',
+      dark: '#5B21B6',
+      contrastText: '#fff',
     },
     background: {
-      default: '#F5F5F5',
-      paper: '#FFFFFF',
+      default: '#0F172A', // slate-900
+      paper: '#111827',   // slate-800
     },
     text: {
-      primary: '#333333',
-      secondary: '#757575',
+      primary: '#E5E7EB', // gray-200
+      secondary: '#9CA3AF', // gray-400
     },
     success: {
-      main: '#4CAF50',
+      main: '#22C55E',
     },
     warning: {
-      main: '#FF9800',
+      main: '#F59E0B',
     },
     info: {
-      main: '#2196F3',
+      main: '#3B82F6',
     },
     error: {
-      main: '#F44336',
+      main: '#EF4444',
     },
   },
   typography: {
